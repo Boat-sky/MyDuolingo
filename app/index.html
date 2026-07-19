@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyDuolingo — ฝึกศัพท์จีน Data Center</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- top bar -->
+  <header id="topbar">
+    <div class="stat" title="สตรีค (วันติดต่อกัน)">🔥 <span id="stat-streak">0</span></div>
+    <div class="stat" title="XP รวม">⚡ <span id="stat-xp">0</span></div>
+    <div class="stat" title="หัวใจ">❤️ <span id="stat-hearts">5</span></div>
+  </header>
+
+  <!-- home: unit path -->
+  <main id="screen-home" class="screen">
+    <div class="lang-toggle">
+      <button id="lang-cn" class="lang-btn active"><span class="lang-badge badge-cn">中</span> ภาษาจีน</button>
+      <button id="lang-en" class="lang-btn"><span class="lang-badge badge-en">EN</span> ภาษาอังกฤษ</button>
+    </div>
+    <div class="home-actions">
+      <button class="btn btn-blue" id="btn-practice">💪 ฝึกทบทวน (คำที่ใกล้ลืม)</button>
+      <button class="btn btn-red" id="btn-mistakes">📕 ทบทวนคำที่ตอบผิด (<span id="mistake-count">0</span>)</button>
+      <button class="btn btn-purple" id="btn-vocab">📚 คลังคำศัพท์ (<span id="learned-count">0</span>)</button>
+    </div>
+    <div id="unit-path"></div>
+  </main>
+
+  <!-- lesson -->
+  <main id="screen-lesson" class="screen hidden">
+    <div class="lesson-top">
+      <button id="btn-quit" class="quit">✕</button>
+      <div class="progress-outer"><div id="lesson-progress" class="progress-inner"></div></div>
+      <div class="lesson-hearts">❤️ <span id="lesson-hearts">5</span></div>
+    </div>
+    <div id="exercise-area"></div>
+    <div id="feedback" class="feedback hidden">
+      <div id="feedback-text"></div>
+      <button id="btn-continue" class="btn btn-green">ต่อไป</button>
+    </div>
+  </main>
+
+  <!-- vocab library -->
+  <main id="screen-vocab" class="screen hidden">
+    <div class="vocab-top">
+      <button id="btn-vocab-back" class="quit">←</button>
+      <h2>คลังคำศัพท์</h2>
+    </div>
+    <div id="vocab-summary" class="vocab-summary"></div>
+    <input id="vocab-search" class="type-input" placeholder="🔍 ค้นหา: จีน / พินอิน / อังกฤษ / ไทย" autocomplete="off">
+    <div class="vocab-filters">
+      <button class="vfilter active" data-f="learned">เรียนแล้ว</button>
+      <button class="vfilter" data-f="weak">ใกล้ลืม</button>
+      <button class="vfilter" data-f="mistakes">ตอบผิดค้าง</button>
+      <button class="vfilter" data-f="all">ทั้งหมด</button>
+    </div>
+    <div id="vocab-list"></div>
+  </main>
+
+  <!-- results -->
+  <main id="screen-results" class="screen hidden">
+    <div class="results-card">
+      <div class="results-emoji" id="results-emoji">🎉</div>
+      <h2 id="results-title">จบบทเรียน!</h2>
+      <div class="results-stats">
+        <div class="rstat"><div class="rstat-label">XP ที่ได้</div><div class="rstat-value" id="results-xp">0</div></div>
+        <div class="rstat"><div class="rstat-label">ความแม่นยำ</div><div class="rstat-value" id="results-acc">0%</div></div>
+      </div>
+      <button class="btn btn-green" id="btn-home">กลับหน้าหลัก</button>
+    </div>
+  </main>
+</div>
+<script src="data.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
