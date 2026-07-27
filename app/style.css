@@ -39,6 +39,14 @@ body {
   cursor: pointer; font-family: inherit; background: var(--blue); color: #fff;
 }
 
+.ui-lang-toggle { display: flex; gap: 4px; }
+.ui-lang-btn {
+  border: 2px solid var(--gray); border-radius: 8px; padding: 4px 10px;
+  font-size: 12px; font-weight: 800; background: #fff; color: var(--gray-dark);
+  cursor: pointer; font-family: inherit;
+}
+.ui-lang-btn.active { border-color: var(--blue); color: var(--blue); background: #eaf7ff; }
+
 .screen { flex: 1; padding: 20px; }
 .hidden { display: none !important; }
 

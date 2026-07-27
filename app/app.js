@@ -1,16 +1,78 @@
 /* app.js — UI layer. Uses VOCAB (data.js) and Engine (engine.js). */
 
+// ---------- i18n ----------
+const STRINGS = {
+  pageTitle: { th: 'ฝึกศัพท์จีน Data Center', en: 'Chinese Vocab Trainer' },
+  streakTitle: { th: 'สตรีค (วันติดต่อกัน)', en: 'Streak (days in a row)' },
+  xpTitle: { th: 'XP รวม', en: 'Total XP' },
+  heartsTitle: { th: 'หัวใจ', en: 'Hearts' },
+  signIn: { th: 'เข้าสู่ระบบด้วย Google', en: 'Sign in with Google' },
+  signOut: { th: 'ออกจากระบบ', en: 'Sign out' },
+  langCn: { th: 'ภาษาจีน', en: 'Chinese' },
+  langEn: { th: 'ภาษาอังกฤษ', en: 'English' },
+  btnPractice: { th: '💪 ฝึกทบทวน (คำที่ใกล้ลืม)', en: '💪 Practice (words fading fast)' },
+  btnMistakes: { th: '📕 ทบทวนคำที่ตอบผิด', en: '📕 Review mistakes' },
+  btnVocab: { th: '📚 คลังคำศัพท์', en: '📚 Vocabulary' },
+  quit: { th: 'ออก', en: 'Quit' },
+  continue: { th: 'ต่อไป', en: 'Continue' },
+  vocabTitle: { th: 'คลังคำศัพท์', en: 'Vocabulary' },
+  vocabSearch: { th: '🔍 ค้นหา: จีน / พินอิน / อังกฤษ / ไทย', en: '🔍 Search: Chinese / pinyin / English' },
+  filterLearned: { th: 'เรียนแล้ว', en: 'Learned' },
+  filterWeak: { th: 'ใกล้ลืม', en: 'Fading' },
+  filterMistakes: { th: 'ตอบผิดค้าง', en: 'Mistakes' },
+  filterAll: { th: 'ทั้งหมด', en: 'All' },
+  resultsDone: { th: 'จบบทเรียน!', en: 'Lesson complete!' },
+  resultsFailed: { th: 'หัวใจหมดแล้ว ลองใหม่นะ', en: 'Out of hearts — try again!' },
+  resultsXp: { th: 'XP ที่ได้', en: 'XP earned' },
+  resultsAcc: { th: 'ความแม่นยำ', en: 'Accuracy' },
+  backHome: { th: 'กลับหน้าหลัก', en: 'Back to home' },
+  unitTitle: { th: 'ยูนิต ', en: 'Unit ' },
+  strMetaTitle: { th: 'ตอบถูก/เห็นทั้งหมด — ฝึกล่าสุด', en: 'Correct/seen — last practiced' },
+  strMetaNew: { th: 'ยังไม่เรียน', en: 'Not learned yet' },
+  vocabSummary: { th: 'เรียนแล้ว {n} จาก {total} คำ — แสดง {shown} คำ', en: 'Learned {n} of {total} words — showing {shown}' },
+  speakCn: { th: 'ฟังเสียงจีน', en: 'Listen to Chinese' },
+  speakEn: { th: 'ฟังเสียงอังกฤษ', en: 'Listen to English' },
+  noPracticeWords: { th: 'ยังไม่มีคำที่เคยเรียนในโหมดนี้ — เริ่มยูนิตแรกก่อนนะ!', en: "You haven't learned any words in this mode yet — start the first unit!" },
+  noMistakes: { th: 'ไม่มีคำที่ตอบผิดค้างอยู่ เยี่ยมมาก! 🎉', en: 'No pending mistakes — great job! 🎉' },
+  insCn2th: { th: 'คำนี้แปลว่าอะไร?', en: 'What does this word mean?' },
+  insTh2cnEn: { th: 'เลือกคำภาษาอังกฤษที่ตรงกัน', en: 'Choose the matching Chinese word' },
+  insTh2cnCn: { th: 'เลือกคำภาษาจีนที่ตรงกัน', en: 'Choose the matching Chinese word' },
+  insListen: { th: 'ฟังแล้วเลือกคำที่ได้ยิน 🔊', en: 'Listen and choose what you heard 🔊' },
+  insPinyinEn: { th: 'พิมพ์คำศัพท์ภาษาอังกฤษ', en: 'Type the pinyin' },
+  insPinyinCn: { th: 'พิมพ์พินอิน (ไม่ต้องใส่วรรณยุกต์)', en: 'Type the pinyin (no tone marks needed)' },
+  insMatch: { th: 'จับคู่คำ', en: 'Match the words' },
+  tapToListen: { th: 'กดเพื่อฟังเสียง', en: 'Tap to listen' },
+  checkAnswer: { th: 'ตรวจคำตอบ', en: 'Check' },
+  pinyinPlaceholderEn: { th: 'เช่น battery', en: 'e.g. dianchi' },
+  pinyinPlaceholderCn: { th: 'เช่น dianchi', en: 'e.g. dianchi' },
+  matchAllCorrect: { th: 'จับคู่ถูกทั้งหมด! 🎉', en: 'All matched correctly! 🎉' },
+  matchWrong: { th: 'ผิด {n} คู่ — ที่ถูกคือ: {fix}', en: 'Wrong {n} — correct: {fix}' },
+  correct: { th: 'ถูกต้อง! 🎉', en: 'Correct! 🎉' },
+  answerIs: { th: 'คำตอบคือ: {text}', en: 'Answer: {text}' },
+  quitConfirm: { th: 'ออกจากบทเรียน? ความคืบหน้าของบทนี้จะหายไป', en: 'Quit the lesson? Progress for this lesson will be lost' },
+  syncing: { th: 'กำลังซิงค์…', en: 'Syncing…' },
+  synced: { th: 'ซิงค์แล้ว ✓', en: 'Synced ✓' },
+  offline: { th: 'ออฟไลน์', en: 'Offline' },
+};
+const t = (key, vars) => {
+  let s = STRINGS[key][S.uiLang];
+  if (vars) for (const k in vars) s = s.replace('{' + k + '}', vars[k]);
+  return s;
+};
+
+function applyStaticI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  $('lang-toggle-wrap').classList.toggle('hidden', S.uiLang === 'en');
+}
+
 // ---------- persistent state ----------
 const SAVE_KEY = 'myduolingo-v1';
 
 function emptyLang() { return { words: {}, crowns: {}, mistakes: [], unlocked: 1 }; }
 
-function loadState() {
-  let s = null;
-  try {
-    const raw = localStorage.getItem(SAVE_KEY);
-    if (raw) s = JSON.parse(raw);
-  } catch (e) { /* corrupted save — start fresh */ }
+function normalizeState(s) {
   if (!s) s = { xp: 0, streak: { count: 0, lastDay: null } };
   // migrate v1 flat (Chinese-only) save → per-language structure
   if (!s.langs) {
@@ -21,8 +83,19 @@ function loadState() {
     delete s.words; delete s.crowns; delete s.mistakes; delete s.unlocked;
   }
   if (!s.langs.en) s.langs.en = emptyLang();
+  if (!s.langs.cn2en) s.langs.cn2en = emptyLang();
   if (!s.mode) s.mode = 'cn';
+  if (!s.uiLang) s.uiLang = 'th';
+  if (!s.lastMode) s.lastMode = s.mode === 'cn2en' ? 'cn' : s.mode;
   return s;
+}
+function loadState() {
+  let s = null;
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) s = JSON.parse(raw);
+  } catch (e) { /* corrupted save — start fresh */ }
+  return normalizeState(s);
 }
 function saveState() {
   localStorage.setItem(SAVE_KEY, JSON.stringify(S));
@@ -31,9 +104,18 @@ function saveState() {
 
 let S = loadState();
 if (typeof Sync !== 'undefined') {
-  Sync.init(() => S, merged => { S = merged; saveState(); renderHome(); });
+  Sync.init(() => S, merged => {
+    S = normalizeState(merged);
+    saveState();
+    document.documentElement.lang = S.uiLang;
+    applyStaticI18n();
+    $('ui-lang-th').classList.toggle('active', S.uiLang === 'th');
+    $('ui-lang-en').classList.toggle('active', S.uiLang === 'en');
+    renderHome();
+  });
 }
 const L = () => S.langs[S.mode];
+const base = () => S.mode === 'cn2en' ? 'en' : 'th';
 const UNITS = Engine.units(VOCAB);
 
 // ---------- session state ----------
@@ -115,7 +197,7 @@ function renderHome() {
     card.innerHTML =
       '<div class="unit-badge">' + (locked ? '🔒' : crowns > 0 ? '👑' : (u.index + 1)) + '</div>' +
       '<div class="unit-info">' +
-        '<div class="unit-title">ยูนิต ' + (u.index + 1) + '</div>' +
+        '<div class="unit-title">' + t('unitTitle') + (u.index + 1) + '</div>' +
         '<div class="unit-words">' + preview + ' …</div>' +
       '</div>' +
       (crowns > 0 ? '<div class="unit-crowns">👑 ' + crowns + '</div>' : '');
@@ -126,23 +208,36 @@ function renderHome() {
 }
 
 function setMode(mode) {
+  if (S.uiLang === 'en') return; // mode is locked to cn2en while UI language is English
   if (S.mode === mode) return;
   S.mode = mode;
+  S.lastMode = mode;
   saveState();
+  renderHome();
+}
+
+function setUiLang(uiLang) {
+  if (S.uiLang === uiLang) return;
+  S.uiLang = uiLang;
+  S.mode = uiLang === 'en' ? 'cn2en' : S.lastMode;
+  document.documentElement.lang = uiLang;
+  saveState();
+  applyStaticI18n();
+  $('ui-lang-th').classList.toggle('active', uiLang === 'th');
+  $('ui-lang-en').classList.toggle('active', uiLang === 'en');
   renderHome();
 }
 
 // ---------- vocab library ----------
 let vocabFilter = 'learned';
 
+const vocabLangs = () => S.mode === 'cn2en' ? ['cn2en'] : ['cn', 'en'];
 const stateOf = (lang, id) => S.langs[lang].words[id];
-const isLearned = id => {
-  const c = stateOf('cn', id), e = stateOf('en', id);
-  return (c && c.last) || (e && e.last);
-};
+const isLearned = id => vocabLangs().some(lang => { const st = stateOf(lang, id); return st && st.last; });
 
-function thaiDate(ts) {
+function formatDate(ts) {
   const d = new Date(ts);
+  if (S.uiLang === 'en') return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
   return d.getDate() + '/' + (d.getMonth() + 1) + '/' + (d.getFullYear() + 543);
 }
 
@@ -151,12 +246,12 @@ function strengthBars(lang, id) {
   const n = st && st.last ? Engine.strength(st, Date.now()) : 0;
   let bars = '';
   for (let i = 1; i <= 4; i++) bars += '<span class="str-bar' + (i <= n ? ' on' : '') + '"></span>';
-  const flag = lang === 'cn'
-    ? '<span class="lang-badge badge-cn">中</span>'
-    : '<span class="lang-badge badge-en">EN</span>';
+  const flag = lang === 'en'
+    ? '<span class="lang-badge badge-en">EN</span>'
+    : '<span class="lang-badge badge-cn">中</span>';
   const meta = st && st.last
-    ? '<span class="str-meta" title="ตอบถูก/เห็นทั้งหมด — ฝึกล่าสุด">' + st.correct + '/' + st.seen + ' · ' + thaiDate(st.last) + '</span>'
-    : '<span class="str-meta">ยังไม่เรียน</span>';
+    ? '<span class="str-meta" title="' + t('strMetaTitle') + '">' + st.correct + '/' + st.seen + ' · ' + formatDate(st.last) + '</span>'
+    : '<span class="str-meta">' + t('strMetaNew') + '</span>';
   return '<div class="str-row">' + flag + ' <span class="str-bars">' + bars + '</span> ' + meta + '</div>';
 }
 
@@ -171,9 +266,9 @@ function vocabMatches(w, q) {
 function passesFilter(w) {
   if (vocabFilter === 'all') return true;
   if (vocabFilter === 'learned') return isLearned(w.id);
-  if (vocabFilter === 'mistakes') return S.langs.cn.mistakes.includes(w.id) || S.langs.en.mistakes.includes(w.id);
-  // weak: learned in some language whose strength has dropped to 1–2 bars
-  return ['cn', 'en'].some(lang => {
+  if (vocabFilter === 'mistakes') return vocabLangs().some(lang => S.langs[lang].mistakes.includes(w.id));
+  // weak: learned in some track whose strength has dropped to 1–2 bars
+  return vocabLangs().some(lang => {
     const st = stateOf(lang, w.id);
     return st && st.last && Engine.strength(st, Date.now()) <= 2;
   });
@@ -183,10 +278,10 @@ function renderVocabList() {
   const q = $('vocab-search').value.trim().toLowerCase();
   const rows = VOCAB.filter(w => passesFilter(w) && vocabMatches(w, q));
   const learned = VOCAB.filter(w => isLearned(w.id)).length;
-  $('vocab-summary').textContent =
-    'เรียนแล้ว ' + learned + ' จาก ' + VOCAB.length + ' คำ — แสดง ' + rows.length + ' คำ';
+  $('vocab-summary').textContent = t('vocabSummary', { n: learned, total: VOCAB.length, shown: rows.length });
   const list = $('vocab-list');
   list.innerHTML = '';
+  const cn2en = S.mode === 'cn2en';
   rows.forEach(w => {
     const div = document.createElement('div');
     div.className = 'vocab-row' + (isLearned(w.id) ? '' : ' unseen');
@@ -194,16 +289,16 @@ function renderVocabList() {
       '<div class="vocab-main">' +
         '<div class="vocab-line1">' +
           '<span class="vocab-cn">' + w.cn + '</span>' +
-          '<button class="vocab-speak" data-lang="cn" title="ฟังเสียงจีน">🔊</button>' +
+          '<button class="vocab-speak" data-lang="cn" title="' + t('speakCn') + '">🔊</button>' +
           '<span class="vocab-py">' + w.py + '</span>' +
         '</div>' +
         '<div class="vocab-line1">' +
           '<span class="vocab-en">' + w.en + '</span>' +
-          '<button class="vocab-speak" data-lang="en" title="ฟังเสียงอังกฤษ">🔊</button>' +
+          '<button class="vocab-speak" data-lang="en" title="' + t('speakEn') + '">🔊</button>' +
         '</div>' +
-        '<div class="vocab-th">' + w.th + '</div>' +
+        (cn2en ? '' : '<div class="vocab-th">' + w.th + '</div>') +
       '</div>' +
-      '<div class="vocab-str">' + strengthBars('cn', w.id) + strengthBars('en', w.id) + '</div>';
+      '<div class="vocab-str">' + (cn2en ? strengthBars('cn2en', w.id) : strengthBars('cn', w.id) + strengthBars('en', w.id)) + '</div>';
     div.querySelectorAll('.vocab-speak').forEach(b => {
       b.onclick = () => speak(b.dataset.lang === 'cn' ? w.cn : w.en, b.dataset.lang);
     });
@@ -218,19 +313,20 @@ function openVocab() {
 
 // ---------- lesson flow ----------
 function startLesson(mode, unitIndex) {
-  const lang = S.mode;
+  const lang = S.mode === 'cn2en' ? 'cn' : S.mode;
+  const b = base();
   const seed = (Date.now() & 0x7fffffff) ^ (unitIndex || 0);
   let exercises;
   if (mode === 'unit') {
-    exercises = Engine.buildLesson(UNITS[unitIndex].words, VOCAB, seed, lang);
+    exercises = Engine.buildLesson(UNITS[unitIndex].words, VOCAB, seed, lang, b);
   } else if (mode === 'practice') {
-    exercises = Engine.buildPractice(VOCAB, L().words, Date.now(), seed, 10, lang);
-    if (!exercises.length) { alert('ยังไม่มีคำที่เคยเรียนในโหมดนี้ — เริ่มยูนิตแรกก่อนนะ!'); return; }
+    exercises = Engine.buildPractice(VOCAB, L().words, Date.now(), seed, 10, lang, b);
+    if (!exercises.length) { alert(t('noPracticeWords')); return; }
   } else { // mistakes
-    exercises = Engine.buildMistakes(VOCAB, L().mistakes, seed, 10, lang);
-    if (!exercises.length) { alert('ไม่มีคำที่ตอบผิดค้างอยู่ เยี่ยมมาก! 🎉'); return; }
+    exercises = Engine.buildMistakes(VOCAB, L().mistakes, seed, 10, lang, b);
+    if (!exercises.length) { alert(t('noMistakes')); return; }
   }
-  session = { exercises, index: 0, hearts: 5, correct: 0, total: 0, mode, unitIndex, lang };
+  session = { exercises, index: 0, hearts: 5, correct: 0, total: 0, mode, unitIndex, lang, progressLang: S.mode };
   show('screen-lesson');
   renderExercise();
 }
@@ -254,11 +350,11 @@ function renderExercise() {
 function instruction(ex) {
   const en = ex.lang === 'en';
   return {
-    cn2th: 'คำนี้แปลว่าอะไร?',
-    th2cn: en ? 'เลือกคำภาษาอังกฤษที่ตรงกัน' : 'เลือกคำภาษาจีนที่ตรงกัน',
-    listen: 'ฟังแล้วเลือกคำที่ได้ยิน 🔊',
-    pinyin: en ? 'พิมพ์คำศัพท์ภาษาอังกฤษ' : 'พิมพ์พินอิน (ไม่ต้องใส่วรรณยุกต์)',
-    match: 'จับคู่คำ',
+    cn2th: t('insCn2th'),
+    th2cn: en ? t('insTh2cnEn') : t('insTh2cnCn'),
+    listen: t('insListen'),
+    pinyin: en ? t('insPinyinEn') : t('insPinyinCn'),
+    match: t('insMatch'),
   }[ex.type];
 }
 
@@ -279,7 +375,7 @@ function renderChoice(ex, area) {
     const p = document.createElement('div');
     p.className = 'ex-prompt';
     p.textContent = ex.prompt;
-    if (ex.type === 'cn2th') { p.style.cursor = 'pointer'; p.title = 'กดเพื่อฟังเสียง'; p.onclick = () => speak(targetText(ex), ex.lang); }
+    if (ex.type === 'cn2th') { p.style.cursor = 'pointer'; p.title = t('tapToListen'); p.onclick = () => speak(targetText(ex), ex.lang); }
     area.appendChild(p);
     const s = document.createElement('div');
     s.className = 'ex-sub';
@@ -311,7 +407,7 @@ function renderChoice(ex, area) {
   checkArea.id = 'check-area';
   const checkBtn = document.createElement('button');
   checkBtn.className = 'btn btn-green';
-  checkBtn.textContent = 'ตรวจคำตอบ';
+  checkBtn.textContent = t('checkAnswer');
   checkBtn.disabled = true;
   checkBtn.onclick = () => {
     if (selected === null || checkBtn.dataset.done) return;
@@ -331,8 +427,9 @@ function renderChoice(ex, area) {
 }
 
 function answerText(ex) {
-  if (ex.lang === 'en') return ex.word.en + ' = ' + ex.word.th;
-  return ex.word.cn + ' (' + ex.word.py + ') = ' + ex.word.th;
+  const b = base();
+  if (ex.lang === 'en') return ex.word.en + ' = ' + ex.word[b];
+  return ex.word.cn + ' (' + ex.word.py + ') = ' + ex.word[b];
 }
 
 function renderPinyin(ex, area) {
@@ -342,14 +439,14 @@ function renderPinyin(ex, area) {
     '<div class="ex-sub">' + (ex.sub || '') + '</div>';
   const input = document.createElement('input');
   input.className = 'type-input';
-  input.placeholder = ex.lang === 'en' ? 'เช่น battery' : 'เช่น dianchi';
+  input.placeholder = ex.lang === 'en' ? t('pinyinPlaceholderEn') : t('pinyinPlaceholderCn');
   input.autocomplete = 'off';
   area.appendChild(input);
   const checkArea = document.createElement('div');
   checkArea.id = 'check-area';
   const btn = document.createElement('button');
   btn.className = 'btn btn-green';
-  btn.textContent = 'ตรวจคำตอบ';
+  btn.textContent = t('checkAnswer');
   btn.onclick = check;
   checkArea.appendChild(btn);
   area.appendChild(checkArea);
@@ -360,9 +457,10 @@ function renderPinyin(ex, area) {
     btn.disabled = true;
     input.disabled = true;
     const ok = Engine.checkTyped(input.value, ex.answers, ex.lang);
+    const b = base();
     finishExercise(ex, ok, ex.lang === 'en'
-      ? ex.word.th + ' = ' + ex.word.en
-      : ex.word.cn + ' = ' + ex.word.py + ' (' + ex.word.th + ')');
+      ? ex.word[b] + ' = ' + ex.word.en
+      : ex.word.cn + ' = ' + ex.word.py + ' (' + ex.word[b] + ')');
   }
 }
 
@@ -424,7 +522,7 @@ function renderMatch(ex, area) {
   checkArea.id = 'check-area';
   const checkBtn = document.createElement('button');
   checkBtn.className = 'btn btn-green';
-  checkBtn.textContent = 'ตรวจคำตอบ';
+  checkBtn.textContent = t('checkAnswer');
   checkBtn.disabled = true;
   checkBtn.onclick = () => {
     if (done || pairs.length !== ex.words.length) return;
@@ -446,11 +544,12 @@ function renderMatch(ex, area) {
     session.total++;
     if (ok) session.correct++; else loseHeart();
     saveState();
-    if (ok) showFeedback(true, 'จับคู่ถูกทั้งหมด! 🎉');
+    if (ok) showFeedback(true, t('matchAllCorrect'));
     else {
+      const b = base();
       const fix = ex.words.filter(w => wrongWords.includes(w.id))
-        .map(w => (ex.lang === 'en' ? w.en : w.cn) + ' = ' + w.th).join(' , ');
-      showFeedback(false, 'ผิด ' + wrongWords.length + ' คู่ — ที่ถูกคือ: ' + fix);
+        .map(w => (ex.lang === 'en' ? w.en : w.cn) + ' = ' + w[b]).join(' , ');
+      showFeedback(false, t('matchWrong', { n: wrongWords.length, fix }));
     }
   };
   checkArea.appendChild(checkBtn);
@@ -474,7 +573,7 @@ function finishExercise(ex, ok, text) {
   }
   saveState();
   if (ok && ex.type !== 'listen') speak(targetText(ex), ex.lang);
-  showFeedback(ok, ok ? 'ถูกต้อง! 🎉' : 'คำตอบคือ: ' + text);
+  showFeedback(ok, ok ? t('correct') : t('answerIs', { text }));
 }
 
 function showFeedback(ok, text) {
@@ -500,15 +599,15 @@ function endLesson(completed) {
     S.xp += xp;
     S.streak = Engine.updateStreak(S.streak, Date.now());
     if (session.mode === 'unit') {
-      const lang = S.langs[session.lang];
-      lang.crowns[session.unitIndex] = (lang.crowns[session.unitIndex] || 0) + 1;
-      if (session.unitIndex + 1 >= lang.unlocked) lang.unlocked = Math.min(UNITS.length, session.unitIndex + 2);
+      const bucket = S.langs[session.progressLang];
+      bucket.crowns[session.unitIndex] = (bucket.crowns[session.unitIndex] || 0) + 1;
+      if (session.unitIndex + 1 >= bucket.unlocked) bucket.unlocked = Math.min(UNITS.length, session.unitIndex + 2);
     }
   }
   saveState();
   session = null;
   $('results-emoji').textContent = completed ? (acc >= 90 ? '🏆' : '🎉') : '💔';
-  $('results-title').textContent = completed ? 'จบบทเรียน!' : 'หัวใจหมดแล้ว ลองใหม่นะ';
+  $('results-title').textContent = completed ? t('resultsDone') : t('resultsFailed');
   $('results-xp').textContent = '+' + xp;
   $('results-acc').textContent = acc + '%';
   renderTopbar();
@@ -518,6 +617,8 @@ function endLesson(completed) {
 // ---------- wiring ----------
 $('lang-cn').onclick = () => setMode('cn');
 $('lang-en').onclick = () => setMode('en');
+$('ui-lang-th').onclick = () => setUiLang('th');
+$('ui-lang-en').onclick = () => setUiLang('en');
 $('btn-vocab').onclick = openVocab;
 $('btn-vocab-back').onclick = renderHome;
 $('vocab-search').oninput = renderVocabList;
@@ -533,13 +634,13 @@ $('btn-mistakes').onclick = () => startLesson('mistakes');
 $('btn-continue').onclick = nextExercise;
 $('btn-home').onclick = renderHome;
 $('btn-quit').onclick = () => {
-  if (confirm('ออกจากบทเรียน? ความคืบหน้าของบทนี้จะหายไป')) { session = null; renderHome(); }
+  if (confirm(t('quitConfirm'))) { session = null; renderHome(); }
 };
 if (typeof Sync !== 'undefined') {
   $('btn-signin').onclick = () => Sync.signIn();
   $('btn-signout').onclick = () => Sync.signOut();
   Sync.onStatus(status => {
-    $('sync-status').textContent = { syncing: 'กำลังซิงค์…', synced: 'ซิงค์แล้ว ✓', offline: 'ออฟไลน์' }[status];
+    $('sync-status').textContent = t(status);
     $('sync-status').className = 'sync-status ' + status;
     renderTopbar();
   });
@@ -548,4 +649,8 @@ if (typeof Sync !== 'undefined') {
   });
 }
 
+document.documentElement.lang = S.uiLang;
+applyStaticI18n();
+$('ui-lang-th').classList.toggle('active', S.uiLang === 'th');
+$('ui-lang-en').classList.toggle('active', S.uiLang === 'en');
 renderHome();

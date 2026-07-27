@@ -90,13 +90,18 @@ const Sync = (() => {
       xp: Math.max(local.xp, cloud.xp),
       streak: mergeStreak(local.streak, cloud.streak),
       mode: local.mode,
+      uiLang: local.uiLang,
+      lastMode: local.lastMode,
       langs: {
         cn: mergeLang(local.langs.cn, cloud.langs.cn),
         en: mergeLang(local.langs.en, cloud.langs.en),
+        cn2en: mergeLang(local.langs.cn2en || emptyLang(), (cloud.langs && cloud.langs.cn2en) || emptyLang()),
       },
     };
     return merged;
   }
+
+  function emptyLang() { return { words: {}, crowns: {}, mistakes: [], unlocked: 1 }; }
 
   function mergeStreak(local, cloud) {
     if (local.lastDay === cloud.lastDay) {
