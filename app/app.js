@@ -52,19 +52,37 @@ function pickVoice() {
   const vs = speechSynthesis.getVoices();
   voices.cn = vs.find(v => /^zh([-_]CN)?/i.test(v.lang)) || vs.find(v => /zh/i.test(v.lang)) || null;
   voices.en = vs.find(v => /^en([-_]US)?/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
+  return vs.length > 0;
 }
 if ('speechSynthesis' in window) {
   pickVoice();
   speechSynthesis.onvoiceschanged = pickVoice;
 }
-function speak(text, lang) {
+// resolves once getVoices() has actually populated (or after a timeout, for browsers that never fire onvoiceschanged)
+function voicesReady() {
+  if (!('speechSynthesis' in window)) return Promise.resolve();
+  if (pickVoice()) return Promise.resolve();
+  return new Promise(resolve => {
+    const onChange = () => { pickVoice(); cleanup(); resolve(); };
+    const timer = setTimeout(() => { cleanup(); resolve(); }, 2000);
+    function cleanup() {
+      speechSynthesis.removeEventListener('voiceschanged', onChange);
+      clearTimeout(timer);
+    }
+    speechSynthesis.addEventListener('voiceschanged', onChange);
+  });
+}
+function speak(text, lang, retry = true) {
   if (!('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang === 'en' ? 'en-US' : 'zh-CN';
-  if (voices[lang]) u.voice = voices[lang];
-  u.rate = 0.9;
-  speechSynthesis.speak(u);
+  voicesReady().then(() => {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang === 'en' ? 'en-US' : 'zh-CN';
+    if (voices[lang]) u.voice = voices[lang];
+    u.rate = 0.9;
+    if (retry) u.onerror = () => speak(text, lang, false);
+    speechSynthesis.speak(u);
+  });
 }
 // the word in the target language of an exercise
 const targetText = ex => ex.lang === 'en' ? ex.word.en : ex.word.cn;
@@ -256,7 +274,7 @@ function renderChoice(ex, area) {
     sp.textContent = '🔊';
     sp.onclick = () => speak(ex.speak, ex.lang);
     area.appendChild(sp);
-    setTimeout(() => speak(ex.speak, ex.lang), 300);
+    speak(ex.speak, ex.lang);
   } else {
     const p = document.createElement('div');
     p.className = 'ex-prompt';

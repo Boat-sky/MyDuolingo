@@ -71,8 +71,9 @@ const Engine = (() => {
     return a;
   }
 
-  function pickDistractors(word, pool, n, rng) {
-    const cands = shuffle(pool.filter(w => w.id !== word.id), rng);
+  function pickDistractors(word, pool, n, rng, labelFn) {
+    const targetLabel = labelFn(word);
+    const cands = shuffle(pool.filter(w => w.id !== word.id && labelFn(w) !== targetLabel), rng);
     return cands.slice(0, n);
   }
 
@@ -83,18 +84,20 @@ const Engine = (() => {
   function buildExercise(type, word, pool, rng, lang = 'cn') {
     if (type === 'match') return null; // built separately from several words
     const F = lang === 'en' ? 'en' : 'cn';
-    const d = pickDistractors(word, pool, 3, rng);
     if (type === 'cn2th') {
+      const d = pickDistractors(word, pool, 3, rng, w => w.th);
       return { type, lang, word, prompt: word[F], sub: lang === 'cn' ? word.py : '',
         choices: shuffle([word, ...d], rng).map(w => ({ id: w.id, label: w.th })),
         answerId: word.id };
     }
     if (type === 'th2cn') {
+      const d = pickDistractors(word, pool, 3, rng, w => w[F]);
       return { type, lang, word, prompt: word.th, sub: '',
         choices: shuffle([word, ...d], rng).map(w => ({ id: w.id, label: w[F], sub: lang === 'cn' ? w.py : '' })),
         answerId: word.id };
     }
     if (type === 'listen') {
+      const d = pickDistractors(word, pool, 3, rng, w => w[F]);
       return { type, lang, word, prompt: '', sub: '', speak: word[F],
         choices: shuffle([word, ...d], rng).map(w => ({ id: w.id, label: w[F], sub: w.th })),
         answerId: word.id };
