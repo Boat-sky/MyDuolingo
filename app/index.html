@@ -13,6 +13,9 @@
     <div class="stat" title="สตรีค (วันติดต่อกัน)">🔥 <span id="stat-streak">0</span></div>
     <div class="stat" title="XP รวม">⚡ <span id="stat-xp">0</span></div>
     <div class="stat" title="หัวใจ">❤️ <span id="stat-hearts">5</span></div>
+    <span id="sync-status" class="sync-status offline">ออฟไลน์</span>
+    <button id="btn-signin" class="btn-account">เข้าสู่ระบบด้วย Google</button>
+    <button id="btn-signout" class="btn-account hidden">ออกจากระบบ</button>
   </header>
 
   <!-- home: unit path -->
@@ -75,6 +78,8 @@
 </div>
 <script src="data.js"></script>
 <script src="engine.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sync.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

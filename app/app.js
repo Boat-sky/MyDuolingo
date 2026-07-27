@@ -24,9 +24,15 @@ function loadState() {
   if (!s.mode) s.mode = 'cn';
   return s;
 }
-function saveState() { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }
+function saveState() {
+  localStorage.setItem(SAVE_KEY, JSON.stringify(S));
+  if (typeof Sync !== 'undefined') Sync.schedulePush(S);
+}
 
 let S = loadState();
+if (typeof Sync !== 'undefined') {
+  Sync.init(() => S, merged => { S = merged; saveState(); renderHome(); });
+}
 const L = () => S.langs[S.mode];
 const UNITS = Engine.units(VOCAB);
 
@@ -68,6 +74,9 @@ function renderTopbar() {
   $('stat-streak').textContent = S.streak.count || 0;
   $('stat-xp').textContent = S.xp;
   $('stat-hearts').textContent = session ? session.hearts : 5;
+  const signedIn = typeof Sync !== 'undefined' && Sync.currentUser();
+  $('btn-signin').classList.toggle('hidden', !!signedIn);
+  $('btn-signout').classList.toggle('hidden', !signedIn);
 }
 
 // ---------- home ----------
@@ -508,5 +517,17 @@ $('btn-home').onclick = renderHome;
 $('btn-quit').onclick = () => {
   if (confirm('ออกจากบทเรียน? ความคืบหน้าของบทนี้จะหายไป')) { session = null; renderHome(); }
 };
+if (typeof Sync !== 'undefined') {
+  $('btn-signin').onclick = () => Sync.signIn();
+  $('btn-signout').onclick = () => Sync.signOut();
+  Sync.onStatus(status => {
+    $('sync-status').textContent = { syncing: 'กำลังซิงค์…', synced: 'ซิงค์แล้ว ✓', offline: 'ออฟไลน์' }[status];
+    $('sync-status').className = 'sync-status ' + status;
+    renderTopbar();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') Sync.flushNow(S);
+  });
+}
 
 renderHome();

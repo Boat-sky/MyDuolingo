@@ -22,11 +22,22 @@ body {
 #app { max-width: 640px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
 
 #topbar {
-  display: flex; justify-content: flex-end; gap: 20px;
+  display: flex; justify-content: flex-end; align-items: center; gap: 20px;
   padding: 14px 20px; background: #fff; border-bottom: 2px solid var(--gray);
   position: sticky; top: 0; z-index: 10;
+  flex-wrap: wrap; row-gap: 6px;
 }
 .stat { font-weight: 700; font-size: 18px; }
+
+.sync-status { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 8px; color: #fff; }
+.sync-status.offline { background: var(--gray-dark); }
+.sync-status.syncing { background: var(--blue); }
+.sync-status.synced  { background: var(--green); }
+
+.btn-account {
+  border: none; border-radius: 10px; padding: 6px 12px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit; background: var(--blue); color: #fff;
+}
 
 .screen { flex: 1; padding: 20px; }
 .hidden { display: none !important; }
