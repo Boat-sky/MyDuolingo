@@ -75,10 +75,9 @@ PDU（电源分配单元）,PDU (diàn yuán fēn pèi dān yuán),PDU (Power Di
 耗电量,hào diàn liàng,Power Consumption,ปริมาณการใช้ไฟฟ้า
 功率密度,gōng lǜ mì dù,Power Density,ความหนาแน่นของกำลังไฟฟ้า
 配电,pèi diàn,Power Distribution,การจ่ายไฟฟ้า (power distribution)
-动力配电箱,dòng lì pèi diàn xiāng,Power Distribution Box,ตู้จ่ายไฟกำลัง (power distribution box)
-PDF - 电源分配柜/列头柜,diàn yuán fēn pèi guì / liè tóu guì,Power Distribution Frame (PDF),ตู้กระจายไฟฟ้า (PDF)
-PDF（配电柜/精密配电柜）,PDF (pèi diàn guì),Power Distribution Frame / Cabinet (PDF),ตู้จ่ายไฟ PDF (Power Distribution Frame)
-配电单元,pèi diàn dān yuán,Power Distribution Unit (PDU),ตู้จ่ายไฟ PDU
+动力配电箱,dòng lì pèi diàn xiāng,Power Distribution Box,กล่องจ่ายไฟกำลัง (power distribution box)
+PDF（电源分配柜/列头柜/配电柜）,diàn yuán fēn pèi guì / liè tóu guì,Power Distribution Frame / Cabinet (PDF),ตู้กระจายไฟฟ้า PDF (Power Distribution Frame)
+配电单元,pèi diàn dān yuán,Power Distribution Unit (PDU),หน่วยจ่ายไฟ PDU
 功率因数校正,gōng lǜ yīn shù jiào zhèng,Power Factor Correction,การปรับปรุงตัวประกอบกำลัง (power factor correction)
 供配电基础设施,gōng pèi diàn jī chǔ shè shī,Power Infrastructure,โครงสร้างพื้นฐานด้านไฟฟ้ากำลัง
 电力计量,diàn lì jì liàng,Power Metering,การวัดค่าพลังงานไฟฟ้า
@@ -1132,13 +1131,6 @@ N+1 冗余,N jiā yī róngyú,N+1 Redundancy,สำรองแบบ N+1
 试用期,shìyòngqī,Probation Period,ช่วงทดลองงาน
 转正,zhuǎnzhèng,Become a Permanent Employee,บรรจุเป็นพนักงานประจำ
 职业发展,zhíyè fāzhǎn,Career Development,ความก้าวหน้าในอาชีพ
-我能吃苦耐劳，可以适应倒班和夜班。,"wǒ néng chīkǔ nàiláo, kěyǐ shìyìng dǎobān hé yèbān",I can endure hard work and adapt to shift rotation and night shifts.,ผมอดทนต่องานหนัก รับกะและกะดึกได้
-我责任心强，做事细心认真。,"wǒ zérènxīn qiáng, zuòshì xìxīn rènzhēn",I have a strong sense of responsibility and work carefully and diligently.,ผมมีความรับผิดชอบสูง ทำงานละเอียดรอบคอบ
-我会严格按照SOP和应急预案操作。,wǒ huì yángé ànzhào SOP hé yìngjí yù'àn cāozuò,I will operate strictly according to the SOP and emergency plans.,ผมจะทำตาม SOP และแผนฉุกเฉินอย่างเคร่งครัด
-遇到超出权限的情况，我会第一时间上报。,"yùdào chāochū quánxiàn de qíngkuàng, wǒ huì dì-yī shíjiān shàngbào","If a situation is beyond my authority, I will report it immediately.",เมื่อเจอเรื่องเกินอำนาจ ผมจะรายงานทันที
-我的学习能力强，能快速上手新知识。,"wǒ de xuéxí nénglì qiáng, néng kuàisù shàngshǒu xīn zhīshi",I learn quickly and can pick up new knowledge fast.,ผมเรียนรู้เร็ว รับความรู้ใหม่ได้ไว
-我希望能长期稳定地在贵公司发展。,wǒ xīwàng néng chángqī wěndìng de zài guì gōngsī fāzhǎn,I hope to grow with your company stably over the long term.,ผมอยากเติบโตกับบริษัทระยะยาวอย่างมั่นคง
-我中文流利，可以在中泰团队之间沟通协调。,"wǒ Zhōngwén liúlì, kěyǐ zài Zhōng-Tài tuánduì zhījiān gōutōng xiétiáo",I speak fluent Chinese and can coordinate between Chinese and Thai teams.,ผมพูดจีนคล่อง ช่วยประสานทีมจีน-ไทยได้
 数据中心的稳定运行是第一位的。,shùjù zhōngxīn de wěndìng yùnxíng shì dì-yī wèi de,Stable operation of the data center comes first.,ความเสถียรของดาต้าเซ็นเตอร์คือสิ่งสำคัญที่สุด
 满足 / 满意,mǎnzú / mǎnyì,satisfy / satisfied,ทำให้พอใจ / รู้สึกพอใจ
 实践 / 练习,shíjiàn / liànxí,practice,การฝึกฝน / การปฏิบัติ
@@ -1199,7 +1191,7 @@ A级/B级/C级机房供电配置,A jí / B jí / C jí jī fáng gōng diàn pè
 常见接地系统命名,cháng jiàn jiē dì xì tǒng mìng míng,"Common Grounding System Naming (TN-C, TN-S, IT)","ชื่อระบบกราวด์ที่พบทั่วไป (TN-C, TN-S, IT)"
 接地系统组成,jiē dì xì tǒng zǔ chéng,Composition of the Grounding System,องค์ประกอบของระบบกราวด์ (grounding system)
 导电剂,dǎo diàn jì,Conductive Agent,สารนำไฟฟ้า (conductive agent)
-控制箱,kòng zhì xiāng,Control Box,ตู้ควบคุม (control box)
+控制箱,kòng zhì xiāng,Control Box,กล่องควบคุม (control box)
 电力铜导体,diàn lì tóng dǎo tǐ,Copper Conductor (for data center cables),ตัวนำทองแดง (copper conductor) - มาตรฐานสำหรับสาย data center
 铜箔,tóng bó,Copper Foil,แผ่นฟอยล์ทองแดง (copper foil)
 循环寿命,xún huán shòu mìng,Cycle Life,อายุการใช้งานตามรอบชาร์จ (cycle life)
