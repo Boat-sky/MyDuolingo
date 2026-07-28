@@ -144,7 +144,7 @@ UPS续航时间,UPS xù háng shí jiān,UPS Runtime,ระยะเวลาท
 封闭冷通道,fēng bì lěng tōng dào,Cold Aisle Containment,การปิดล้อมช่องทางเดินเย็น (cold aisle containment)
 压缩机,yā suō jī,Compressor,คอมเพรสเซอร์
 机房空调 (CRAC),jī fáng kōng tiáo,Computer Room Air Conditioners (CRAC),เครื่องปรับอากาศห้องคอมพิวเตอร์ (CRAC)
-CRAH（精密空调）,CRAH (jīng mì kōng tiáo),Computer Room Air Handler (CRAH),เครื่องปรับอากาศแบบ CRAH
+CRAH（精密空调）,CRAH (jīng mì kōng tiáo),Computer Room Air Handler (CRAH),เครื่องปรับอากาศห้องคอมพิวเตอร์ (CRAH) รับลมร้อนกลับมาทำความเย็นด้วยน้ำเย็น (ไม่มีคอมเพรสเซอร์ในตัว)
 冷凝器,lěng níng qì,Condenser,คอนเดนเซอร์ (เครื่องควบแน่น)
 连管,lián guǎn,Connecting Pipe / Tube,ท่อเชื่อมต่อ
 连接器接口,lián jiē qì jiē kǒu,Connector Interface,จุดเชื่อมต่ออุปกรณ์ (connector interface)

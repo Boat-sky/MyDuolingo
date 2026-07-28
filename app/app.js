@@ -102,6 +102,8 @@ function saveState() {
   if (typeof Sync !== 'undefined') Sync.schedulePush(S);
 }
 
+let scrollToUnit = null;
+
 let S = loadState();
 if (typeof Sync !== 'undefined') {
   Sync.init(() => S, merged => {
@@ -205,6 +207,10 @@ function renderHome() {
     path.appendChild(card);
   });
   show('screen-home');
+  const target = scrollToUnit !== null ? scrollToUnit : Math.min(L().unlocked - 1, UNITS.length - 1);
+  const card = path.children[target];
+  if (card) card.scrollIntoView({ block: 'center' });
+  scrollToUnit = null;
 }
 
 function setMode(mode) {
@@ -602,6 +608,7 @@ function endLesson(completed) {
       const bucket = S.langs[session.progressLang];
       bucket.crowns[session.unitIndex] = (bucket.crowns[session.unitIndex] || 0) + 1;
       if (session.unitIndex + 1 >= bucket.unlocked) bucket.unlocked = Math.min(UNITS.length, session.unitIndex + 2);
+      scrollToUnit = session.unitIndex;
     }
   }
   saveState();
